@@ -222,7 +222,6 @@ footer-home{display:block;background:var(--bg2);padding:1.5rem 2rem;border-top:1
 </head>
 <body>
 
-<!-- NAV -->
 <nav>
   <div class="nav-logo" onclick="goTo('home')">City Café<span>Restaurante</span></div>
   <ul>
@@ -233,10 +232,7 @@ footer-home{display:block;background:var(--bg2);padding:1.5rem 2rem;border-top:1
   </ul>
 </nav>
 
-<!-- ═══ HOME ═══ -->
 <div class="page active" id="page-home">
-
-  <!-- Hero -->
   <div class="hero">
     <div class="hero-photo"></div>
     <div class="skyline-wrap">
@@ -287,7 +283,6 @@ footer-home{display:block;background:var(--bg2);padding:1.5rem 2rem;border-top:1
     </div>
   </div>
 
-  <!-- Nosotros -->
   <div class="info-strip">
     <div class="inner" style="grid-template-columns:1fr;max-width:700px;">
       <div class="about-text">
@@ -305,7 +300,6 @@ footer-home{display:block;background:var(--bg2);padding:1.5rem 2rem;border-top:1
     </div>
   </div>
 
-  <!-- Contacto -->
   <div class="contact-strip">
     <div class="inner">
       <p class="section-label">✦ Estamos aquí</p>
@@ -318,7 +312,6 @@ footer-home{display:block;background:var(--bg2);padding:1.5rem 2rem;border-top:1
     </div>
   </div>
 
-  <!-- Footer -->
   <div style="background:var(--bg2);padding:1.4rem 2rem;border-top:1px solid var(--border);">
     <div class="footer-inner">
       <span class="footer-logo-sm">City Café</span>
@@ -328,7 +321,6 @@ footer-home{display:block;background:var(--bg2);padding:1.5rem 2rem;border-top:1
   </div>
 </div>
 
-<!-- ═══ MENÚ ═══ -->
 <div class="page" id="page-menu">
   <div class="inner">
     <div class="menu-header">
@@ -380,7 +372,6 @@ footer-home{display:block;background:var(--bg2);padding:1.5rem 2rem;border-top:1
   </div>
 </div>
 
-<!-- ═══ PEDIDO ═══ -->
 <div class="page" id="page-pedido">
   <div class="inner">
     <p class="section-label" style="margin-top:.5rem">✦ Online</p>
@@ -684,6 +675,7 @@ const MD={
     {c:'8', n:'Green Machine',  d:'Espinacas, apio, brócoli, plátano y piña · Spinach, celery, broccoli, banana & pineapple',p:5.50},
     {c:'12',n:'Tropical Colada',d:'Plátano, coco y piña · Banana, coconut & pineapple',                     p:5.50},
   ],
+  espirituosos:[
     {c:'—',n:'Arehucas Blanco / Oro',d:'Ron',p:3.50},
     {c:'—',n:'Havana Club 3 años',d:'Ron',p:4.00},
     {c:'—',n:'Havana Club 7 años',d:'Ron',p:6.00},
@@ -772,13 +764,12 @@ async function submitOrder(){
   const mins=now.getHours()*60+now.getMinutes();
   if(mins>=21*60+30){showToast('⚠️ Pedidos web solo hasta las 21:30. Llámanos directamente.',true);return;}
   const total=cart.reduce((s,i)=>s+i.price*i.qty,0);
-  const lista=cart.map(i=>`• ${i.name.replace(/^\[\d+\] /,'')} x${i.qty} — ${(i.price*i.qty).toFixed(2)}€`).join('\n');
+  const lista=cart.map(i=>`• ${i.name.replace(/^$begin:math:display$\\d\+$end:math:display$ /,'')} x${i.qty} — ${(i.price*i.qty).toFixed(2)}€`).join('\n');
   const tipoLabel=tipo==='local'?'Comer en local':'Take Away (recogida)';
 
   document.getElementById('orderFormWrap').classList.add('hide');
   document.getElementById('sendingMsg').classList.add('show');
 
-  // Guardar registro local
   try{
     const p=JSON.parse(localStorage.getItem('cc_pedidos')||'[]');
     p.unshift({fecha:now.toISOString(),nombre,telefono,tipo,notas,items:[...cart],total:total.toFixed(2)});
@@ -786,7 +777,6 @@ async function submitOrder(){
     localStorage.setItem('cc_pedidos',JSON.stringify(p));
   }catch(ex){}
 
-  // Enviar email via EmailJS
   try{
     await emailjs.send('service_bbefeno','template_462pn3y',{
       to_email: 'citycafebr@gmail.com',
