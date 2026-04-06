@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>City Café — Restaurante</title>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>emailjs.init('7nZIkpNmT1pSrswnX');</script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Dancing+Script:wght@700;800&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a0618;--bg2:#110924;--card:rgba(255,255,255,.04);--border:rgba(180,140,255,.15);
+  --accent:#c0392b;--purple:#8b5cf6;--pink:#ec4899;--cyan:#06b6d4;
+  --gold:#fbbf24;--white:#f8f4ff;--muted:#a89cc0;--text:#e8e0f5;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{height:100%;}
+body{height:100%;background:var(--bg);color:var(--text);font-family:'Barlow',sans-serif;font-weight:300;overflow:hidden;}
+::-webkit-scrollbar{width:5px;}::-webkit-scrollbar-track{background:var(--bg);}::-webkit-scrollbar-thumb{background:var(--purple);border-radius:3px;}
+
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  display:flex;justify-content:space-between;align-items:center;
+  padding:.9rem 2rem;
+  background:rgba(10,6,24,.97);backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);
+}
+.nav-logo{font-family:'Dancing Script',cursive;font-size:1.8rem;color:#fff;
+  text-shadow:0 0 30px rgba(139,92,246,.8),0 0 60px rgba(236,72,153,.4);cursor:pointer;}
+.nav-logo span{font-family:'Barlow',sans-serif;font-size:.6rem;letter-spacing:5px;text-transform:uppercase;color:var(--muted);display:block;margin-top:-4px;}
+nav ul{list-style:none;display:flex;gap:1.5rem;flex-wrap:wrap;}
+nav ul li a{
+  color:var(--muted);text-decoration:none;font-size:.78rem;letter-spacing:2px;
+  text-transform:uppercase;cursor:pointer;padding:.3rem .5rem;border-radius:3px;
+  transition:all .2s;display:block;
+}
+nav ul li a:hover,nav ul li a.active{color:#fff;}
+nav ul li a.active{color:var(--purple);}
+.nav-cta{background:linear-gradient(135deg,var(--accent),#e74c3c)!important;
+  color:white!important;padding:.45rem 1.2rem!important;border-radius:3px;
+  box-shadow:0 0 20px rgba(192,57,43,.4);}
+.nav-cta:hover{box-shadow:0 0 30px rgba(192,57,43,.7)!important;}
+
+/* ── PAGES ── */
+.page{display:none;position:fixed;top:58px;left:0;right:0;bottom:0;overflow-y:auto;overflow-x:hidden;}
+.page.active{display:block;}
+
+/* ── HOME PAGE ── */
+#page-home{background:var(--bg);}
+.hero{
+  min-height:calc(100vh - 58px);position:relative;
+  display:flex;align-items:center;justify-content:center;overflow:hidden;
+}
+.hero-photo{position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse at 20% 50%, rgba(109,40,217,.35) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 30%, rgba(219,39,119,.25) 0%, transparent 55%),
+    radial-gradient(ellipse at 50% 80%, rgba(234,88,12,.2) 0%, transparent 50%),
+    linear-gradient(160deg, #0f0520 0%, #1a0635 40%, #0d0318 100%);
+}
+.skyline-wrap{position:absolute;bottom:0;left:0;right:0;height:260px;overflow:hidden;pointer-events:none;}
+.skyline-wrap svg{position:absolute;bottom:0;width:100%;}
+.win{animation:winkle var(--d,3s) ease-in-out var(--delay,0s) infinite alternate;}
+@keyframes winkle{0%{opacity:.2}100%{opacity:.9}}
+.neon-horizon{position:absolute;bottom:258px;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--purple),var(--pink),var(--cyan),transparent);
+  filter:blur(1px);animation:horizonPulse 4s ease-in-out infinite;}
+@keyframes horizonPulse{0%,100%{opacity:.5}50%{opacity:1}}
+.hero-content{position:relative;z-index:10;text-align:center;padding:2rem;}
+.hero-badge{display:inline-flex;align-items:center;gap:.6rem;
+  background:rgba(139,92,246,.12);border:1px solid rgba(139,92,246,.3);
+  border-radius:50px;padding:.4rem 1.1rem;font-size:.78rem;color:var(--muted);
+  margin-bottom:1.3rem;animation:fadeUp 1s ease .1s both;}
+.badge-dot{width:7px;height:7px;border-radius:50%;background:#22c55e;box-shadow:0 0 8px #22c55e;animation:blink 2s infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.hero-eyebrow{font-size:.72rem;letter-spacing:8px;text-transform:uppercase;color:var(--purple);margin-bottom:1rem;animation:fadeUp 1s ease .2s both;}
+.hero-logo{font-family:'Dancing Script',cursive;font-size:clamp(4.5rem,12vw,8.5rem);line-height:.95;
+  color:#c084fc;
+  background:linear-gradient(135deg,#c084fc 0%,#f0abfc 30%,#fbcfe8 50%,#fde68a 70%,#fb923c 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  animation:fadeUp 1s ease .3s both;display:inline-block;}
+.hero-sub{font-size:.78rem;letter-spacing:10px;text-transform:uppercase;color:var(--muted);margin-top:.4rem;animation:fadeUp 1s ease .4s both;}
+.hero-tagline{font-size:1rem;color:rgba(232,224,245,.7);margin:1.5rem auto 2rem;max-width:480px;line-height:1.8;animation:fadeUp 1s ease .5s both;}
+.hero-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;animation:fadeUp 1s ease .6s both;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(25px)}to{opacity:1;transform:translateY(0)}}
+
+/* info strips below hero */
+.info-strip{background:var(--bg2);padding:4rem 2rem;border-top:1px solid var(--border);}
+.info-strip .inner{max-width:900px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center;}
+.about-img{border-radius:8px;overflow:hidden;}
+.about-img img{width:100%;display:block;}
+.about-text .section-label{font-size:.72rem;letter-spacing:6px;text-transform:uppercase;color:var(--purple);margin-bottom:.6rem;}
+.about-text h2{font-family:'Playfair Display',serif;font-size:2rem;color:var(--white);margin-bottom:1rem;line-height:1.2;}
+.sline{width:45px;height:2px;background:linear-gradient(90deg,var(--purple),var(--pink));margin-bottom:1.3rem;}
+.about-text p{color:var(--muted);line-height:1.9;font-size:.92rem;margin-bottom:1rem;}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:1.5rem;}
+.stat-num{font-family:'Playfair Display',serif;font-size:1.7rem;color:var(--purple);}
+.stat-label{font-size:.7rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-top:.2rem;}
+.contact-strip{background:var(--bg);padding:3rem 2rem;border-top:1px solid var(--border);}
+.contact-strip .inner{max-width:800px;margin:0 auto;text-align:center;}
+.contact-strip h2{font-family:'Playfair Display',serif;font-size:1.8rem;color:var(--white);margin-bottom:.4rem;}
+.contact-strip .section-label{font-size:.72rem;letter-spacing:6px;text-transform:uppercase;color:var(--purple);margin-bottom:.6rem;}
+.contact-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:2.5rem;}
+.contact-card{background:var(--card);border:1px solid var(--border);padding:1.8rem 1.2rem;border-radius:6px;}
+.contact-icon{font-size:1.6rem;margin-bottom:.7rem;}
+.contact-card h4{font-size:.74rem;letter-spacing:2px;text-transform:uppercase;color:var(--purple);margin-bottom:.5rem;}
+.contact-card p{color:var(--muted);font-size:.87rem;line-height:1.6;}
+footer-home{display:block;background:var(--bg2);padding:1.5rem 2rem;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;}
+.footer-inner{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;max-width:1200px;margin:0 auto;width:100%;}
+.footer-logo-sm{font-family:'Dancing Script',cursive;font-size:1.4rem;color:var(--purple);}
+.footer-text{color:var(--muted);font-size:.78rem;}
+
+/* ── MENÚ PAGE ── */
+#page-menu{background:var(--bg2);}
+#page-menu .inner{max-width:1200px;margin:0 auto;padding:2.5rem 2rem;}
+.menu-header{text-align:center;margin-bottom:2.5rem;}
+.menu-header h2{font-family:'Playfair Display',serif;font-size:2.2rem;color:var(--white);margin-bottom:.5rem;}
+.menu-header .section-label{font-size:.72rem;letter-spacing:6px;text-transform:uppercase;color:var(--purple);margin-bottom:.6rem;}
+.menu-header .sline{margin:0 auto 0;}
+.menu-tabs{display:flex;flex-wrap:wrap;gap:.5rem;justify-content:center;margin-bottom:2.5rem;}
+.tab-btn{background:rgba(255,255,255,.04);color:var(--muted);border:1px solid var(--border);
+  padding:.55rem 1.1rem;font-family:'Barlow',sans-serif;font-size:.76rem;
+  letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;border-radius:3px;transition:all .2s;}
+.tab-btn:hover{border-color:var(--purple);color:var(--purple);}
+.tab-btn.active{background:var(--purple);border-color:var(--purple);color:white;}
+.menu-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:1.1rem;}
+.menu-card{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:1.2rem;
+  transition:all .25s;cursor:pointer;position:relative;overflow:hidden;}
+.menu-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--purple),var(--pink));opacity:0;transition:opacity .3s;}
+.menu-card:hover{border-color:rgba(139,92,246,.35);transform:translateY(-2px);box-shadow:0 6px 25px rgba(139,92,246,.12);}
+.menu-card:hover::before{opacity:1;}
+.card-code{font-size:.67rem;color:var(--purple);letter-spacing:1px;margin-bottom:.25rem;}
+.card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:.35rem;gap:.6rem;}
+.card-name{font-family:'Playfair Display',serif;font-size:.96rem;color:var(--white);flex:1;line-height:1.3;}
+.card-price{color:var(--gold);font-weight:700;font-size:1rem;white-space:nowrap;}
+.card-desc{color:var(--muted);font-size:.81rem;line-height:1.5;margin-bottom:.85rem;min-height:1rem;}
+.add-btn{background:transparent;border:1px solid rgba(139,92,246,.3);color:var(--purple);
+  padding:.42rem .9rem;font-family:'Barlow',sans-serif;font-size:.74rem;
+  letter-spacing:1px;text-transform:uppercase;cursor:pointer;border-radius:3px;transition:all .2s;width:100%;}
+.add-btn:hover{background:var(--purple);border-color:var(--purple);color:white;}
+.cat-section{display:none;}.cat-section.active{display:block;}
+.cat-note{color:var(--muted);font-size:.81rem;font-style:italic;margin-bottom:1.1rem;
+  padding:.55rem .9rem;background:rgba(255,255,255,.03);border-radius:4px;border-left:2px solid var(--purple);}
+
+/* ── PEDIDO PAGE ── */
+#page-pedido{background:var(--bg);}
+#page-pedido .inner{max-width:960px;margin:0 auto;padding:2.5rem 2rem;}
+#page-pedido h2{font-family:'Playfair Display',serif;font-size:2rem;color:var(--white);margin-bottom:.5rem;}
+.order-notice{background:linear-gradient(135deg,rgba(251,191,36,.12),rgba(249,115,22,.08));
+  border:1px solid rgba(251,191,36,.28);border-radius:6px;padding:.8rem 1.1rem;
+  display:flex;align-items:flex-start;gap:.7rem;margin:1.5rem 0 2rem;font-size:.87rem;color:#fde68a;}
+.order-notice-icon{font-size:1.2rem;flex-shrink:0;margin-top:.1rem;}
+.order-layout{display:grid;grid-template-columns:1fr 340px;gap:2rem;align-items:start;}
+.form-group{margin-bottom:1.2rem;}
+.form-group label{display:block;font-size:.74rem;letter-spacing:2px;text-transform:uppercase;color:var(--purple);margin-bottom:.45rem;}
+.form-group input,.form-group select,.form-group textarea{
+  width:100%;background:rgba(255,255,255,.05);border:1px solid var(--border);
+  color:var(--white);padding:.8rem .9rem;font-family:'Barlow',sans-serif;font-size:.92rem;
+  border-radius:4px;transition:border-color .25s;outline:none;}
+.form-group input::placeholder,.form-group textarea::placeholder{color:rgba(168,156,192,.45);}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--purple);box-shadow:0 0 0 3px rgba(139,92,246,.1);}
+.form-group select option{background:#110924;color:var(--white);}
+.form-group textarea{min-height:85px;resize:vertical;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+.order-summary{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:8px;padding:1.6rem;position:sticky;top:1rem;}
+.summary-title{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--white);margin-bottom:1.2rem;padding-bottom:.8rem;border-bottom:1px solid var(--border);}
+.cart-empty{color:var(--muted);font-size:.87rem;text-align:center;padding:1.8rem 0;}
+.cart-items{list-style:none;}
+.cart-item{display:flex;justify-content:space-between;align-items:center;padding:.65rem 0;border-bottom:1px solid rgba(255,255,255,.05);font-size:.86rem;}
+.ci-name{color:var(--text);flex:1;font-size:.83rem;line-height:1.3;}
+.ci-qty{color:var(--muted);margin:0 .4rem;font-size:.8rem;}
+.ci-price{color:var(--gold);font-weight:600;font-size:.86rem;}
+.ci-rm{background:none;border:none;color:rgba(255,100,100,.5);cursor:pointer;font-size:.85rem;margin-left:.3rem;transition:color .2s;}
+.ci-rm:hover{color:rgba(255,100,100,.9);}
+.cart-total{display:flex;justify-content:space-between;padding-top:.8rem;margin-top:.3rem;font-weight:600;font-size:.98rem;color:var(--white);}
+.cart-total span:last-child{color:var(--gold);}
+.order-success{display:none;text-align:center;padding:2.5rem 1rem;}
+.order-success.show{display:block;}
+.success-icon{font-size:3rem;margin-bottom:.8rem;animation:bounceIn .5s ease;}
+@keyframes bounceIn{0%{transform:scale(0)}70%{transform:scale(1.15)}100%{transform:scale(1)}}
+.hide{display:none!important;}
+.spinner{width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--purple);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto .8rem;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.sending-msg{display:none;text-align:center;padding:2rem;}
+.sending-msg.show{display:block;}
+
+/* BUTTONS */
+.btn-glow{background:linear-gradient(135deg,var(--accent),#e74c3c);color:white;border:none;
+  padding:.9rem 2.2rem;font-family:'Barlow',sans-serif;font-size:.83rem;
+  letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:3px;
+  text-decoration:none;display:inline-block;box-shadow:0 0 25px rgba(192,57,43,.45);transition:all .3s;}
+.btn-glow:hover{box-shadow:0 0 45px rgba(192,57,43,.75);transform:translateY(-2px);}
+.btn-outline{background:transparent;color:var(--white);border:1px solid rgba(139,92,246,.5);
+  padding:.9rem 2.2rem;font-family:'Barlow',sans-serif;font-size:.83rem;
+  letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:3px;
+  text-decoration:none;display:inline-block;transition:all .3s;}
+.btn-outline:hover{border-color:var(--purple);color:var(--purple);background:rgba(139,92,246,.07);}
+
+/* TOAST */
+.toast{position:fixed;bottom:1.5rem;right:1.5rem;z-index:999;
+  background:var(--purple);color:white;padding:.85rem 1.5rem;border-radius:5px;
+  font-size:.86rem;box-shadow:0 4px 25px rgba(139,92,246,.5);
+  transform:translateY(80px);opacity:0;transition:all .4s cubic-bezier(.34,1.56,.64,1);
+  pointer-events:none;max-width:300px;}
+.toast.show{transform:translateY(0);opacity:1;}
+.toast.error{background:var(--accent);box-shadow:0 4px 25px rgba(192,57,43,.5);}
+
+@media(max-width:700px){
+  nav ul{gap:.8rem;}
+  .nav-logo span{display:none;}
+  nav ul li a{font-size:.7rem;letter-spacing:1px;padding:.2rem .3rem;}
+  .order-layout{grid-template-columns:1fr;}
+  .order-summary{position:static;}
+  .info-strip .inner{grid-template-columns:1fr;}
+  .contact-grid{grid-template-columns:1fr;}
+  .form-row{grid-template-columns:1fr;}
+  .hero-logo{font-size:clamp(3.5rem,15vw,7rem);}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo" onclick="goTo('home')">City Café<span>Restaurante</span></div>
+  <ul>
+    <li><a id="nav-home" class="active" onclick="goTo('home')">Inicio</a></li>
+    <li><a id="nav-menu" onclick="goTo('menu')">Menú</a></li>
+    <li><a id="nav-pedido" onclick="goTo('pedido')">Pedido</a></li>
+    <li><a id="nav-pedido2" class="nav-cta" onclick="goTo('pedido')">Pedir ahora</a></li>
+  </ul>
+</nav>
+
+<!-- ═══ HOME ═══ -->
+<div class="page active" id="page-home">
+
+  <!-- Hero -->
+  <div class="hero">
+    <div class="hero-photo"></div>
+    <div class="skyline-wrap">
+      <div class="neon-horizon"></div>
+      <svg viewBox="0 0 1440 260" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+        <defs>
+          <linearGradient id="skyG" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#6d28d9"/>
+            <stop offset="40%" stop-color="#7c3aed"/>
+            <stop offset="70%" stop-color="#db2777"/>
+            <stop offset="100%" stop-color="#ea580c"/>
+          </linearGradient>
+        </defs>
+        <rect x="0" y="0" width="1440" height="260" fill="url(#skyG)" opacity=".22"/>
+        <rect x="0" y="120" width="30" height="140" fill="#1e1035"/><rect x="35" y="90" width="25" height="170" fill="#1e1035"/>
+        <rect x="65" y="70" width="40" height="190" fill="#1e1035"/><rect x="110" y="50" width="20" height="210" fill="#1e1035"/>
+        <rect x="135" y="60" width="35" height="200" fill="#1a0d2e"/><rect x="175" y="80" width="30" height="180" fill="#1e1035"/>
+        <rect x="230" y="30" width="45" height="230" fill="#160b28"/><rect x="305" y="45" width="30" height="215" fill="#1a0d2e"/>
+        <rect x="340" y="20" width="18" height="240" fill="#1e1035"/><rect x="363" y="60" width="35" height="200" fill="#160b28"/>
+        <rect x="430" y="35" width="50" height="225" fill="#1a0d2e"/><rect x="508" y="10" width="25" height="250" fill="#160b28"/>
+        <rect x="538" y="45" width="40" height="215" fill="#1e1035"/><rect x="608" y="55" width="30" height="205" fill="#1e1035"/>
+        <rect x="643" y="30" width="22" height="230" fill="#160b28"/><rect x="670" y="15" width="45" height="245" fill="#1e1035"/>
+        <rect x="743" y="65" width="35" height="195" fill="#1e1035"/><rect x="808" y="25" width="28" height="235" fill="#1e1035"/>
+        <rect x="841" y="5" width="22" height="255" fill="#1a0d2e"/><rect x="868" y="50" width="40" height="210" fill="#1e1035"/>
+        <rect x="936" y="35" width="50" height="225" fill="#1e1035"/><rect x="1076" y="60" width="42" height="200" fill="#1e1035"/>
+        <rect x="1148" y="55" width="35" height="205" fill="#1e1035"/><rect x="1241" y="20" width="50" height="240" fill="#1a0d2e"/>
+        <rect x="1358" y="50" width="40" height="210" fill="#1e1035"/><rect x="1403" y="75" width="37" height="185" fill="#1a0d2e"/>
+        <rect class="win" x="238" y="45" width="5" height="4" fill="#f59e0b" style="--d:2.3s;--delay:.2s"/>
+        <rect class="win" x="248" y="60" width="5" height="4" fill="#06b6d4" style="--d:4s;--delay:1.2s"/>
+        <rect class="win" x="438" y="50" width="5" height="4" fill="#c084fc" style="--d:3.5s;--delay:.3s"/>
+        <rect class="win" x="678" y="25" width="5" height="4" fill="#fbbf24" style="--d:2.8s;--delay:.4s"/>
+        <rect class="win" x="690" y="40" width="5" height="4" fill="#c084fc" style="--d:2.5s;--delay:.9s"/>
+        <rect class="win" x="848" y="15" width="5" height="4" fill="#fbbf24" style="--d:2.2s;--delay:.6s"/>
+        <rect class="win" x="1249" y="35" width="5" height="4" fill="#f59e0b" style="--d:3s;--delay:.8s"/>
+        <rect x="0" y="242" width="1440" height="18" fill="#0a0618"/>
+      </svg>
+    </div>
+    <div class="hero-content">
+      <div class="hero-badge"><div class="badge-dot"></div>Abierto hoy · 09:00 – 23:00</div>
+      <p class="hero-eyebrow">✦ Bienvenidos al</p>
+      <div class="hero-logo">City Café</div>
+      <p class="hero-sub">Restaurante</p>
+      <p class="hero-tagline">Bocadillos, hamburguesas Angus Gourmet, pizzas artesanales,<br>pasta, carnes, pescados y mucho más.</p>
+      <div class="hero-btns">
+        <button class="btn-glow" onclick="goTo('menu')">Ver el Menú</button>
+        <button class="btn-outline" onclick="goTo('pedido')">Hacer Pedido</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Nosotros -->
+  <div class="info-strip">
+    <div class="inner" style="grid-template-columns:1fr;max-width:700px;">
+      <div class="about-text">
+        <p class="section-label">✦ Nuestra Historia</p>
+        <h2>Sabor auténtico<br><em>en cada plato</em></h2>
+        <div class="sline"></div>
+        <p>City Café es el lugar donde la ciudad se sienta a la mesa. Una carta variada con bocadillos, hamburguesas Angus Gourmet, pizzas 100% artesanales, pasta, carnes y mucho más.</p>
+        <p>Productos frescos, recetas propias y un ambiente único. Abiertos todos los días de 09:00 a 23:00.</p>
+        <div class="stats">
+          <div><div class="stat-num">09–23h</div><div class="stat-label">Horario</div></div>
+          <div><div class="stat-num">4.8★</div><div class="stat-label">Valoración</div></div>
+          <div><div class="stat-num">+60</div><div class="stat-label">Platos</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contacto -->
+  <div class="contact-strip">
+    <div class="inner">
+      <p class="section-label">✦ Estamos aquí</p>
+      <h2>Encuéntranos</h2>
+      <div class="contact-grid">
+        <div class="contact-card"><div class="contact-icon">📍</div><h4>Dirección</h4><p>Avenida de Francia<br>C.C. Cita, Planta 1<br>35100 Playa del Inglés<br>San Bartolomé de Tirajana<br>Gran Canaria, España</p></div>
+        <div class="contact-card"><div class="contact-icon">🕐</div><h4>Horario</h4><p>Todos los días<br><strong style="color:var(--white)">09:00 – 23:00</strong><br><small style="color:rgba(168,156,192,.6);font-size:.78rem">Pedidos web hasta las 21:30</small></p></div>
+        <div class="contact-card"><div class="contact-icon">🌐</div><h4>Pedidos en la Web</h4><p>Realiza tu pedido online<br><strong style="color:var(--white)">09:00 – 21:30</strong></p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div style="background:var(--bg2);padding:1.4rem 2rem;border-top:1px solid var(--border);">
+    <div class="footer-inner">
+      <span class="footer-logo-sm">City Café</span>
+      <span class="footer-text">© 2026 Restaurante City Café · Todos los derechos reservados</span>
+      <span style="color:var(--purple);font-size:.8rem">Hecho con ❤️</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MENÚ ═══ -->
+<div class="page" id="page-menu">
+  <div class="inner">
+    <div class="menu-header">
+      <p class="section-label">✦ Nuestra Carta</p>
+      <h2>Menú Completo</h2>
+      <div class="sline" style="margin:.5rem auto 0"></div>
+    </div>
+    <div class="menu-tabs">
+      <button class="tab-btn active" onclick="showCat('desayunos',this)">Desayunos</button>
+      <button class="tab-btn" onclick="showCat('tapas',this)">Tapas</button>
+      <button class="tab-btn" onclick="showCat('bocadillos',this)">Bocadillos</button>
+      <button class="tab-btn" onclick="showCat('sandwiches',this)">Sandwiches</button>
+      <button class="tab-btn" onclick="showCat('hotdog',this)">Hot Dog</button>
+      <button class="tab-btn" onclick="showCat('hamburguesas',this)">Hamburguesas</button>
+      <button class="tab-btn" onclick="showCat('pizzas',this)">Pizzas</button>
+      <button class="tab-btn" onclick="showCat('pasta',this)">Pasta</button>
+      <button class="tab-btn" onclick="showCat('ensaladas',this)">Ensaladas</button>
+      <button class="tab-btn" onclick="showCat('huevos',this)">Huevos</button>
+      <button class="tab-btn" onclick="showCat('carnes',this)">Carnes</button>
+      <button class="tab-btn" onclick="showCat('pescados',this)">Pescados</button>
+      <button class="tab-btn" onclick="showCat('postres',this)">Postres</button>
+      <button class="tab-btn" onclick="showCat('bebidas',this)">Cafés</button>
+      <button class="tab-btn" onclick="showCat('cocktails',this)">Cocktails</button>
+      <button class="tab-btn" onclick="showCat('cervezas',this)">Cervezas</button>
+      <button class="tab-btn" onclick="showCat('refrescos',this)">Refrescos</button>
+      <button class="tab-btn" onclick="showCat('espirituosos',this)">Espirituosos</button>
+      <button class="tab-btn" onclick="showCat('smoothies',this)">Smoothies</button>
+    </div>
+    <div id="cat-desayunos" class="cat-section active"><p class="cat-note">Desayunos · Breakfasts · Frühstück</p><div class="menu-grid" id="grid-desayunos"></div></div>
+    <div id="cat-tapas" class="cat-section"><p class="cat-note">Tapas · Starters · Vorspeisen</p><div class="menu-grid" id="grid-tapas"></div></div>
+    <div id="cat-bocadillos" class="cat-section"><div class="menu-grid" id="grid-bocadillos"></div></div>
+    <div id="cat-sandwiches" class="cat-section"><div class="menu-grid" id="grid-sandwiches"></div></div>
+    <div id="cat-hotdog" class="cat-section"><div class="menu-grid" id="grid-hotdog"></div></div>
+    <div id="cat-hamburguesas" class="cat-section"><div class="menu-grid" id="grid-hamburguesas"></div></div>
+    <div id="cat-pizzas" class="cat-section"><p class="cat-note">100% Homemade · Base de salsa de tomate, orégano y queso</p><div class="menu-grid" id="grid-pizzas"></div></div>
+    <div id="cat-pasta" class="cat-section"><p class="cat-note">Spaghetti</p><div class="menu-grid" id="grid-pasta"></div></div>
+    <div id="cat-ensaladas" class="cat-section"><div class="menu-grid" id="grid-ensaladas"></div></div>
+    <div id="cat-huevos" class="cat-section"><p class="cat-note">Servidos con papas fritas o papas arrugadas y ensalada (excepto *)</p><div class="menu-grid" id="grid-huevos"></div></div>
+    <div id="cat-carnes" class="cat-section"><p class="cat-note">Con ensalada y elección de papas fritas, papas arrugadas o arroz · Salsa extra +2,00€</p><div class="menu-grid" id="grid-carnes"></div></div>
+    <div id="cat-pescados" class="cat-section"><p class="cat-note">Con ensalada y elección de papas fritas, papas arrugadas o arroz</p><div class="menu-grid" id="grid-pescados"></div></div>
+    <div id="cat-postres" class="cat-section"><p class="cat-note">Todos servidos con nata y sirope</p><div class="menu-grid" id="grid-postres"></div></div>
+    <div id="cat-bebidas" class="cat-section"><div class="menu-grid" id="grid-bebidas"></div></div>
+    <div id="cat-cocktails" class="cat-section"><p class="cat-note">Classic Cocktails y Long Cocktails</p><div class="menu-grid" id="grid-cocktails"></div></div>
+    <div id="cat-cervezas" class="cat-section"><p class="cat-note">De barril y botella · También disponible con limón o sprite</p><div class="menu-grid" id="grid-cervezas"></div></div>
+    <div id="cat-refrescos" class="cat-section"><div class="menu-grid" id="grid-refrescos"></div></div>
+    <div id="cat-espirituosos" class="cat-section"><p class="cat-note">Ron, Whisky, Gin, Vodka, Aperitivos, Brandy, Digestivos y Licores</p><div class="menu-grid" id="grid-espirituosos"></div></div>
+    <div id="cat-smoothies" class="cat-section"><p class="cat-note">100% Naturales · Hechos al momento con 150g de fruta y verdura · 0% azúcar añadido · 0% conservantes</p><div class="menu-grid" id="grid-smoothies"></div></div>
+    <div style="height:2rem"></div>
+  </div>
+</div>
+
+<!-- ═══ PEDIDO ═══ -->
+<div class="page" id="page-pedido">
+  <div class="inner">
+    <p class="section-label" style="margin-top:.5rem">✦ Online</p>
+    <h2>Hacer tu Pedido</h2>
+    <div class="sline" style="margin:.5rem 0 0"></div>
+
+    <div class="order-notice">
+      <span class="order-notice-icon">⏰</span>
+      <div><strong>Pedidos web disponibles hasta las 21:30</strong> — Pasada esa hora, llámanos directamente al restaurante.</div>
+    </div>
+
+    <div class="order-layout">
+      <div>
+        <div id="orderFormWrap">
+          <div class="form-row">
+            <div class="form-group"><label>Nombre *</label><input type="text" id="nombre" placeholder="Tu nombre completo"></div>
+            <div class="form-group"><label>Teléfono *</label><input type="tel" id="telefono" placeholder="+34 600 000 000"></div>
+          </div>
+          <div class="form-group">
+            <label>Tipo de pedido *</label>
+            <select id="tipo">
+              <option value="">— Selecciona —</option>
+              <option value="local">🍽️ Comer en el local</option>
+              <option value="recogida">🛍️ Recoger en mostrador (Take Away)</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Notas adicionales</label><textarea id="notas" placeholder="Alergias, preferencias, instrucciones especiales..."></textarea></div>
+          <button class="btn-glow" onclick="submitOrder()" style="width:100%;padding:.95rem;border:none;">Confirmar Pedido →</button>
+        </div>
+        <div class="sending-msg" id="sendingMsg"><div class="spinner"></div><p style="color:var(--muted)">Enviando tu pedido...</p></div>
+        <div class="order-success" id="orderSuccess">
+          <div class="success-icon">✅</div>
+          <h3 style="font-family:'Playfair Display',serif;font-size:1.6rem;color:var(--white);margin-bottom:.7rem">¡Pedido recibido!</h3>
+          <p style="color:var(--muted);max-width:380px;margin:0 auto 1.3rem;line-height:1.7">Tu pedido ha sido enviado al restaurante. En breve te contactarán para confirmarlo.</p>
+          <button onclick="resetOrder()" style="background:transparent;border:1px solid rgba(139,92,246,.5);color:var(--purple);padding:.7rem 1.8rem;font-family:'Barlow',sans-serif;font-size:.8rem;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:3px;">Hacer otro pedido</button>
+        </div>
+      </div>
+
+      <div class="order-summary">
+        <div class="summary-title">🛒 Tu Pedido</div>
+        <div id="cartContent"><p class="cart-empty">Añade platos desde el Menú.</p></div>
+        <div id="cartTotal" style="display:none"><div class="cart-total"><span>Total</span><span id="totalPrice">0,00 €</span></div></div>
+      </div>
+    </div>
+    <div style="height:2rem"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ═══ NAVEGACIÓN POR PÁGINAS ═══
+function goTo(page){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('nav ul li a').forEach(a=>a.classList.remove('active'));
+  document.getElementById('page-'+page).classList.add('active');
+  const navEl=document.getElementById('nav-'+page);
+  if(navEl)navEl.classList.add('active');
+  document.getElementById('page-'+page).scrollTop=0;
+}
+
+// ═══ MENÚ DATA ═══
+const MD={
+  tapas:[
+    {c:'001',n:'Pan con Ajo',d:'Garlic Bread',p:2.50},
+    {c:'002',n:'Pan con Ajo, Queso y Tomate Natural',d:'Garlic Bread with Cheese and Tomato',p:4.50},
+    {c:'003',n:'Pan con Ajo y Queso',d:'Garlic Bread with Cheese',p:3.50},
+    {c:'004',n:'Pan Catalan',d:'Catalan bread with tomato',p:7.50},
+    {c:'005',n:'Queso Frito',d:'Fried Cheese',p:7.90},
+    {c:'006',n:'Queso Tierno',d:'Soft Cheese',p:5.90},
+    {c:'007',n:'Jamón Serrano y Queso Semicurado',d:'Serrano Ham and Semi-hard Cheese',p:9.50},
+    {c:'008',n:'Plato de Jamón Serrano',d:'Spanish Cured Ham dish',p:7.90},
+    {c:'009',n:'Queso Semicurado',d:'Semi-hard Cheese',p:7.90},
+    {c:'010',n:'Pimientos del Padrón',d:'Fried Green Peppers',p:7.20},
+    {c:'011',n:'Papas Fritas',d:'French Fries',p:3.50},
+    {c:'012',n:'Papas Arrugadas con Mojo',d:'Canarian Potatoes with Mojo Sauce',p:4.90},
+    {c:'013',n:'Brochetas de Pollo',d:'Chicken Skewers',p:7.00},
+    {c:'014',n:'Alitas de Pollo Tex Mex',d:'Tex Mex Chicken Wings',p:6.90},
+    {c:'015',n:'Gambas al Ajillo',d:'Garlic Shrimps',p:9.50},
+    {c:'016',n:'Calamares',d:'Fried Calamari',p:7.90},
+    {c:'017',n:'Gambas y Champiñones al Ajillo',d:'Garlic Shrimps and Mushrooms',p:11.50},
+    {c:'018',n:'Croquetas de Pescado',d:'Fish Croquettes',p:6.90},
+    {c:'019',n:'Sardinas',d:'Fried Sardines',p:6.50},
+  ],
+  desayunos:[
+    {c:'—',n:'Café + Zumo de Naranja + Tostadas',d:'Coffee · Orange Juice · Toast',p:5.50},
+    {c:'—',n:'Desayuno Alemán',d:'Café, zumo, huevo, embutidos, queso, fruta · German Breakfast',p:9.50},
+    {c:'—',n:'Desayuno Inglés',d:'Bacon, huevos fritos, judías, tostadas · English Breakfast',p:11.00},
+    {c:'1',n:'Bacon + Huevos Fritos + Judías + Tostadas',d:'Bacon · Fried Eggs · Beans · Toast',p:7.50},
+    {c:'2',n:'Salchicha + Tostadas + Huevo Frito + Judías',d:'Sausage · Toast · Fried Egg · Beans',p:7.00},
+    {c:'3',n:'Huevo Frito + Judías + Papas Fritas',d:'Fried Egg · Beans · French Fries',p:6.00},
+    {c:'4',n:'Tortilla Francesa con Papas Fritas',d:'Egg Omelette with French Fries',p:6.50},
+    {c:'5',n:'Hamburguesa + Huevo + Salchicha + Papas Fritas',d:'Hamburger · Fried Egg · Sausage · Fries',p:8.00},
+    {c:'6',n:'Huevo Frito + Bacon + Papas Fritas',d:'Fried Egg · Bacon and Fries',p:7.00},
+    {c:'7',n:'Bacon + Salchicha + Hamburguesa + Papas Fritas',d:'Bacon · Sausage · Hamburger · Fries',p:8.95},
+  ],
+  bocadillos:[
+    {c:'050',n:'Mixto',d:'Jamón y Queso',p:3.50},
+    {c:'051',n:'Hawaii',d:'Jamón, Queso, Piña',p:5.50},
+    {c:'052',n:'City',d:'Pollo, Jamón, Queso',p:5.50},
+    {c:'053',n:'Caesar',d:'Pollo, Parmesano, Salsa Caesar',p:6.50},
+    {c:'054',n:'Atún',d:'',p:5.00},
+    {c:'055',n:'Pollo',d:'',p:5.00},
+    {c:'056',n:'Queso y Bacon',d:'',p:5.00},
+    {c:'057',n:'Jamón Serrano con Tomate Natural',d:'',p:5.00},
+    {c:'058',n:'Jamón Serrano con Queso Semicurado de Canarias',d:'',p:5.50},
+    {c:'059',n:'Pepito (Ternera)',d:'',p:5.50},
+    {c:'060',n:'Pepito City (Ternera y Queso)',d:'',p:6.00},
+    {c:'—',n:'Salmón',d:'Salmón, lechuga, tomate, queso Philadelphia',p:7.50},
+    {c:'—',n:'Jamón Serrano y Queso Canario',d:'Jamón Serrano y Queso Canario',p:7.50},
+    {c:'+',n:'+ Papas Fritas',d:'Añadir a cualquier bocadillo',p:2.50},
+  ],
+  sandwiches:[
+    {c:'101',n:'Mixto',d:'Jamón y Queso',p:3.50},
+    {c:'102',n:'Hawaii',d:'Jamón, Queso, Piña',p:4.50},
+    {c:'103',n:'City',d:'Pollo, Jamón, Queso',p:5.50},
+    {c:'104',n:'Caesar',d:'Pollo, Parmesano, Salsa Caesar',p:6.00},
+    {c:'105',n:'Atún',d:'',p:4.50},
+    {c:'106',n:'Queso y Bacon',d:'',p:4.50},
+    {c:'107',n:'Pollo',d:'',p:4.50},
+    {c:'—',n:'Salmón',d:'Salmón, lechuga, tomate, queso Philadelphia',p:6.50},
+    {c:'—',n:'Queso y Bacon',d:'',p:4.50},
+    {c:'+',n:'+ Papas Fritas',d:'Añadir a cualquier sandwich',p:2.50},
+  ],
+  hotdog:[
+    {c:'150',n:'Frankfurt Hot Dog',d:'',p:3.50},
+    {c:'151',n:'Frankfurt',d:'Bacon, Queso Cheddar, Smokey Baconnaise Sauce',p:5.50},
+    {c:'152',n:'Frankfurt City',d:'Queso Cheddar, Cebolla frita, Salsa BBQ',p:4.50},
+    {c:'153',n:'Bratwurst Hot Dog',d:'',p:4.00},
+    {c:'154',n:'Bratwurst City',d:'Queso y Cebolla frita',p:6.90},
+    {c:'155',n:'Bratwurst en Salsa Curry con Papas Fritas',d:'',p:7.90},
+    {c:'+',n:'+ Papas Fritas',d:'Añadir a cualquier hot dog',p:2.50},
+  ],
+  hamburguesas:[
+    {c:'201',n:'Angus Classic',d:'100% Angus, lechuga, tomate · con papas fritas',p:11.50},
+    {c:'202',n:'Angus Cheeseburger Bacon',d:'Angus, Cheddar, Bacon · con papas fritas',p:13.50},
+    {c:'203',n:'Angus Cheeseburger',d:'Angus, Cheddar · con papas fritas',p:12.90},
+    {c:'204',n:'Angus Caesar',d:'Angus, Parmesano, Bacon, Salsa Caesar',p:13.50},
+    {c:'205',n:'Angus Hawaii',d:'Angus, Piña, Bacon, Cheddar',p:13.50},
+    {c:'206',n:'Angus City Café',d:'Cheddar, Bacon, Huevo Frito, Cebolla Frita',p:13.90},
+    {c:'207',n:'Angus BBQ',d:'Cebolla Frita, Bacon, Salsa Barbacoa',p:13.50},
+    {c:'250',n:'Classic Beef Burger',d:'100% Ternera, lechuga, tomate · con papas fritas',p:8.00},
+    {c:'251',n:'Beef Cheeseburger',d:'Ternera, Queso Cheddar',p:9.90},
+    {c:'252',n:'Beef Cheeseburger Bacon',d:'Ternera, Cheddar, Bacon',p:10.90},
+    {c:'253',n:'Beef Burger Caesar',d:'Ternera, Parmesano, Bacon, Salsa Caesar',p:10.90},
+    {c:'254',n:'Beef Burger Hawaii',d:'Ternera, Piña, Bacon, Cheddar',p:10.90},
+    {c:'255',n:'Beef Burger City Café',d:'Cheddar, Bacon, Huevo Frito, Cebolla Frita',p:11.90},
+    {c:'256',n:'Beef Burger BBQ',d:'Cebolla Frita, Bacon, Salsa Barbacoa',p:10.90},
+    {c:'257',n:'Chicken Cheeseburger Bacon',d:'Pollo, Cheddar, Bacon',p:10.90},
+    {c:'258',n:'Chicken Burger Caesar',d:'Ternera, Parmesano, Bacon, Salsa Caesar',p:11.90},
+  ],
+  pizzas:[
+    {c:'301',n:'Margherita',d:'Tomate y Queso · Tomato and Cheese',p:8.00},
+    {c:'302',n:'Atún y Cebolla',d:'Tuna and Onion',p:10.90},
+    {c:'303',n:'Hawaii',d:'Jamón y Piña · Ham and Pineapple',p:10.90},
+    {c:'304',n:'Caesar',d:'Bacon, Parmesano, Salsa Caesar',p:10.90},
+    {c:'305',n:'Barbeque',d:'Salsa BBQ, Ternera, Cebolla, Champiñones',p:10.90},
+    {c:'306',n:'Vegetariana',d:'Pimienta, Cebolla, Champiñones, Tomate',p:8.00},
+    {c:'307',n:'Romana',d:'Gambas, Jamón, Bacon, Champiñones',p:11.90},
+    {c:'308',n:'Reina',d:'Atún, Ajo, Jamón',p:12.90},
+    {c:'309',n:'Marinera',d:'Atún, Gambas, Cebolla',p:13.90},
+    {c:'310',n:'City Café',d:'Ternera, Cebolla, Salsa Baconnaise',p:13.90},
+    {c:'311',n:'Jamón Serrano',d:'Jamón Serrano y Tomate Natural',p:11.90},
+    {c:'312',n:'Milano',d:'Salami',p:9.90},
+    {c:'313',n:'Salmón',d:'Salmón, Tomate y Cebolla',p:13.90},
+  ],
+  pasta:[
+    {c:'401',n:'Carbonara',d:'Bacon, huevo, queso, pimienta negra',p:9.50},
+    {c:'402',n:'Boloñesa',d:'Carnes, salsa de tomate, cebolla',p:9.00},
+    {c:'403',n:'Napolitana',d:'Salsa de tomate, ajo, albahaca',p:8.00},
+    {c:'404',n:'Pescatore',d:'Tomate, ajo, gambas, atún',p:12.50},
+    {c:'405',n:'Lasaña Boloñesa',d:'Ternera, cebolla, salsa Baconnaise',p:9.50},
+    {c:'406',n:'Lasaña Vegetal',d:'Jamón serrano y tomate natural',p:9.50},
+  ],
+  ensaladas:[
+    {c:'350',n:'Caesar',d:'Lechuga, pollo, crutones, parmesano, salsa caesar',p:8.50},
+    {c:'351',n:'Tropical',d:'Jamón, piña, gambas, salsa cóctel',p:9.90},
+    {c:'352',n:'Atún',d:'',p:8.50},
+    {c:'353',n:'Pollo',d:'',p:8.50},
+    {c:'354',n:'Mixta',d:'',p:6.90},
+    {c:'355',n:'Canaria',d:'Lechuga, tomate, jamón serrano, crutones, queso tierno canario',p:10.90},
+    {c:'356',n:'Gran Canaria',d:'Lechuga, tomate, jamón serrano, crutones, queso semicurado de Canarias',p:12.90},
+    {c:'357',n:'Salmón',d:'Lechuga, salmón, tomate',p:13.90},
+  ],
+  huevos:[
+    {c:'450',n:'Huevo Frito + Bacon + Papas Fritas',d:'Egg and Bacon',p:7.00},
+    {c:'451',n:'Omelette Clásica',d:'Tortilla francesa',p:6.50},
+    {c:'452',n:'Tortilla Jamón y Champiñones',d:'Omelette Ham and Mushrooms',p:7.50},
+    {c:'453',n:'Tortilla Jamón y Queso',d:'Ham and cheese omelette',p:7.50},
+    {c:'454',n:'Tortilla Atún y Queso',d:'Tuna and cheese omelette',p:7.50},
+    {c:'455',n:'Tortilla Atún y Cebolla',d:'Onion and cheese omelette',p:7.50},
+    {c:'456',n:'Huevo + Salchicha + Hamburguesa Ternera + Papas Fritas',d:'',p:8.95},
+    {c:'457',n:'Huevo + Salchicha Bratwurst + Hamburguesa Angus + Papas Fritas',d:'',p:10.95},
+  ],
+  carnes:[
+    {c:'550',n:'Entrecot a la Plancha',d:'Grilled Sirloin Steak',p:15.90},
+    {c:'551',n:'Medio Pollo Asado',d:'Half Roasted Chicken',p:8.90},
+    {c:'552',n:'Pechuga de Pollo a la Plancha',d:'Grilled Chicken Breast',p:8.90},
+    {c:'553',n:'Pechuga de Pollo Empanada',d:'Breaded Chicken Breast',p:9.90},
+    {c:'554',n:'Pechuga Hawaii',d:'Pechuga empanada, Jamón, Queso y Piña',p:11.50},
+    {c:'555',n:'Pechuga Jamón y Queso',d:'Pechuga empanada, Jamón y Queso',p:10.90},
+    {c:'556',n:'Solomillo de Cerdo',d:'Pork Tenderloin',p:11.50},
+    {c:'557',n:'Escalope de Cerdo',d:'Pork Schnitzel',p:8.90},
+    {c:'558',n:'Escalope de Cerdo con Huevo Frito',d:'Pork Schnitzel with Fried Egg',p:10.90},
+    {c:'559',n:'Cerdo Hawaii',d:'Escalope de cerdo, Jamón, Queso y Piña',p:11.50},
+    {c:'560',n:'Cerdo Jamón y Queso',d:'Escalope de cerdo, Jamón y Queso',p:10.50},
+    {c:'561',n:'Vuelta de Ternera',d:'Quick-seared Veal',p:10.90},
+    {c:'562',n:'Nuggets de Pollo',d:'Chicken Nuggets',p:6.90},
+    {c:'563',n:'Chuleta de Cerdo',d:'Pork Chop',p:8.90},
+    {c:'564',n:'Alitas de Pollo Tex Mex',d:'Tex-Mex Chicken Wings',p:8.90},
+    {c:'565',n:'Broceta de Pollo',d:'Brocheta de pollo con salsa saté (cacahuete)',p:12.90},
+    {c:'566',n:'Codillo de Cerdo',d:'Pork Knuckle',p:14.90},
+    {c:'+',n:'Salsa Extra',d:'Champiñón o Pimienta',p:2.00},
+  ],
+  pescados:[
+    {c:'501',n:'Salmón a la Plancha',d:'Grilled Salmon',p:15.90},
+    {c:'502',n:'Lenguado a la Plancha',d:'Grilled Sole',p:16.00},
+    {c:'503',n:'Filete de Pescado Empanizado',d:'Breaded Fish Fillet',p:11.90},
+    {c:'504',n:'Calamares Fritos',d:'Fried Squid',p:9.50},
+    {c:'505',n:'Atún a la Plancha',d:'Grilled Tuna',p:10.90},
+    {c:'506',n:'Pescado a la Plancha',d:'Grilled Fish',p:9.90},
+    {c:'507',n:'Sardinas',d:'Sardines',p:9.90},
+    {c:'+',n:'Salsa Extra',d:'Champiñón o Pimienta',p:2.00},
+  ],
+  postres:[
+    {c:'601',n:'Tarta de Manzana',d:'Con nata y sirope',p:5.00},
+    {c:'602',n:'Tarta de Chocolate',d:'Con nata y sirope',p:5.00},
+    {c:'603',n:'Pudding con Queso y Cereza',d:'Con nata y sirope',p:5.00},
+    {c:'604',n:'Brownie de Chocolate con Helado de Vainilla',d:'Con nata y sirope',p:5.00},
+    {c:'605',n:'Tarta de Queso',d:'Con nata y sirope',p:5.00},
+    {c:'606',n:'Tarta de Zanahoria',d:'Con nata y sirope',p:5.50},
+  ],
+  bebidas:[
+    {c:'—',n:'Infusiones',d:'Té Negro / Té Rojo / Té Verde / Manzanilla / Menta Poleo',p:1.50},
+    {c:'—',n:'Café Solo / Cortado / Espresso',d:'',p:1.40},
+    {c:'—',n:'Café con Leche / Cortado Largo',d:'',p:1.80},
+    {c:'—',n:'Capuchino con Espuma de Leche',d:'',p:2.00},
+    {c:'—',n:'Capuchino con Nata',d:'',p:2.50},
+    {c:'—',n:'Descafeinado Corto (máquina)',d:'',p:1.40},
+    {c:'—',n:'Descafeinado Largo (máquina)',d:'',p:1.80},
+    {c:'—',n:'Café Doble Corto',d:'',p:1.80},
+    {c:'—',n:'Café Doble Largo',d:'',p:2.20},
+    {c:'—',n:'Carajillo Corto',d:'Café con Brandy',p:2.00},
+    {c:'—',n:'Carajillo Largo',d:'Café con Brandy',p:3.00},
+    {c:'—',n:'Leche y Leche Corto',d:'Café corto con hielo y leche condensada',p:1.50},
+    {c:'—',n:'Leche y Leche Largo',d:'Café largo con hielo y leche condensada',p:1.90},
+    {c:'—',n:'Latte Macchiato',d:'',p:2.00},
+    {c:'—',n:'Lumumba',d:'Brandy, Licor de Plátano, Batido de Cacao con Nata',p:5.50},
+    {c:'—',n:'Irish Coffee',d:'Whisky, Azúcar, Café y Nata',p:5.50},
+    {c:'—',n:'Baileys Coffee',d:'Café, Baileys, Leche y Nata',p:7.00},
+    {c:'—',n:'Vaso de Leche',d:'',p:1.50},
+  ],
+  cocktails:[
+    {c:'—',n:'Mojito',d:'Todos los sabores: Clásico, Fresa, Mango, Melón, Sandía',p:7.50},
+    {c:'—',n:'Sex on the Beach',d:'Ron, Licor de Coco, Licor de Plátano, Zumo de Naranja',p:7.50},
+    {c:'—',n:'Tequila Sunrise',d:'Tequila, Zumo de Naranja, Granadina',p:7.50},
+    {c:'—',n:'Piña Colada',d:'Ron Blanco, Licor de Coco, Cream, Zumo de Piña',p:7.50},
+    {c:'—',n:'San Francisco',d:'Sin alcohol · Zumo de Naranja, Melocotón, Piña con Granadina',p:4.50},
+    {c:'—',n:'Maitai',d:'Ron, Zumo de Naranja y Melocotón con Granadina',p:7.50},
+    {c:'—',n:'Coco Loco',d:'Ron, Licor de Coco, Licor de Plátano, Zumo de Naranja',p:7.50},
+    {c:'—',n:'Campari + Zumo de Naranja Natural',d:'',p:7.00},
+    {c:'—',n:'Campari Spritz',d:'Campari, Cava y Soda',p:7.50},
+    {c:'—',n:'Aperol Spritz',d:'Aperol, Cava y Soda',p:7.50},
+    {c:'—',n:'Sangría Copa',d:'',p:4.00},
+    {c:'—',n:'Sangría Medio Litro',d:'',p:7.50},
+    {c:'—',n:'Sangría 1 Litro',d:'',p:13.50},
+    {c:'—',n:'Sangría de Cava Copa',d:'Brandy, Triple Seco, Licor de Plátano, Zumo de Naranja, Cava',p:6.50},
+    {c:'—',n:'Sangría de Cava Medio Litro',d:'',p:12.00},
+    {c:'—',n:'Sangría de Cava 1 Litro',d:'',p:19.00},
+  ],
+  cervezas:[
+    {c:'—',n:'San Miguel Caña 0,25',d:'De barril',p:2.00},
+    {c:'—',n:'San Miguel Jarra 0,40',d:'De barril',p:3.00},
+    {c:'—',n:'Tropical 33cl',d:'Botella',p:2.50},
+    {c:'—',n:'Corona 33cl',d:'Botella',p:3.50},
+    {c:'—',n:'Desperados 33cl',d:'Botella',p:3.50},
+    {c:'—',n:'Heineken 33cl',d:'Botella',p:2.50},
+    {c:'—',n:'Franziskaner 50cl',d:'Trigo Blanco / Negro / Sin Alcohol',p:4.50},
+    {c:'—',n:'San Miguel 0,0 Sin Alcohol',d:'',p:2.50},
+    {c:'—',n:'Kopparberg Fresa y Lima 33cl',d:'Sidra',p:4.00},
+  ],
+  refrescos:[
+    {c:'—',n:'Zumo de Brick',d:'Manzana / Melocotón / Piña',p:2.00},
+    {c:'—',n:'Zumo de Tomate (250ml)',d:'',p:3.00},
+    {c:'—',n:'Agua con/sin gas 0,5L',d:'',p:1.50},
+    {c:'—',n:'Zumo Natural de Naranja',d:'Recién exprimido',p:3.50},
+    {c:'—',n:'Coca Cola / Zero / Sprite / Fanta (240ml)',d:'',p:2.00},
+    {c:'—',n:'Coca Cola / Zero / Sprite / Fanta (310ml)',d:'',p:3.00},
+    {c:'—',n:'Tónica 20cl',d:'',p:1.90},
+    {c:'—',n:'Bitterkase 20cl',d:'',p:2.20},
+    {c:'—',n:'Nestea Limón / Mango',d:'',p:2.25},
+    {c:'—',n:'Spetzi',d:'',p:3.50},
+    {c:'—',n:'Batido',d:'Chocolate, Vainilla, Pistacho, Turrón, Fresa, Straciatella, Limón',p:4.50},
+    {c:'—',n:'Batido con Nata',d:'',p:5.50},
+  ],
+  smoothies:[
+    {c:'1', n:'Berry Burst',    d:'Frambuesa, arándano y plátano · Raspberry, blueberry & banana',         p:5.50},
+    {c:'3', n:'Strawberry Split',d:'Fresa, plátano, papaya y cereza · Strawberry, banana, papaya & cherry', p:5.50},
+    {c:'5', n:'Canarian Kiss',  d:'Melón, fresa, mango y limón · Melon, strawberry, mango & lemon',         p:5.50},
+    {c:'6', n:'Mango Heaven',   d:'Mango, maracuyá, piña y limón · Mango, passion fruit, pineapple & lemon',p:5.50},
+    {c:'8', n:'Green Machine',  d:'Espinacas, apio, brócoli, plátano y piña · Spinach, celery, broccoli, banana & pineapple',p:5.50},
+    {c:'12',n:'Tropical Colada',d:'Plátano, coco y piña · Banana, coconut & pineapple',                     p:5.50},
+  ],
+    {c:'—',n:'Arehucas Blanco / Oro',d:'Ron',p:3.50},
+    {c:'—',n:'Havana Club 3 años',d:'Ron',p:4.00},
+    {c:'—',n:'Havana Club 7 años',d:'Ron',p:6.00},
+    {c:'—',n:'Captain Morgan / Santa Teresa / Bacardi',d:'Ron',p:4.00},
+    {c:'—',n:'J&B / John Haig / Ballantine\'s / 100 Pipers',d:'Whisky',p:4.00},
+    {c:'—',n:'JW Red Label',d:'Whisky',p:4.00},
+    {c:'—',n:'Jim Beam',d:'Whisky',p:5.50},
+    {c:'—',n:'Jack Daniel\'s',d:'Whisky',p:5.50},
+    {c:'—',n:'Jameson',d:'Whisky',p:5.50},
+    {c:'—',n:'Gordon\'s',d:'Gin',p:3.50},
+    {c:'—',n:'Beefeater',d:'Gin',p:4.00},
+    {c:'—',n:'Tanqueray',d:'Gin',p:5.00},
+    {c:'—',n:'Puerto de Indias',d:'Gin',p:5.00},
+    {c:'—',n:'Bombay Sapphire',d:'Gin',p:6.00},
+    {c:'—',n:'Moskovskaya / Smirnoff',d:'Vodka',p:3.50},
+    {c:'—',n:'Absolut',d:'Vodka',p:5.00},
+    {c:'—',n:'Aperitivos (Martini, Campari, Pernod, Aperol…)',d:'Todos a 4,00€',p:4.00},
+    {c:'—',n:'103 / Veterano',d:'Brandy',p:3.50},
+    {c:'—',n:'Magno',d:'Brandy',p:4.00},
+    {c:'—',n:'Carlos I / Carlos III',d:'Brandy',p:7.50},
+    {c:'—',n:'Digestivos (Jägermeister, Fernet, Grappa, Ramazzotti, Malteser)',d:'Todos a 4,00€',p:4.00},
+    {c:'—',n:'Licores (Baileys, Amaretto, Tía María, Galiano, Drambuie, Malibú, Cointreau…)',d:'Todos a 4,00€',p:4.00},
+  ]
+};
+
+function e(s){return s.replace(/'/g,"&#39;");}
+function renderMenus(){
+  for(const[cat,items] of Object.entries(MD)){
+    const g=document.getElementById('grid-'+cat);
+    if(!g)continue;
+    g.innerHTML=items.map(item=>{
+      const ps=item.p.toFixed(2).replace('.',',')+' €';
+      const nm=item.c!=='—'?'['+item.c+'] '+item.n:item.n;
+      return `<div class="menu-card" onclick="addToCart('${e(nm)}',${item.p})">
+        ${item.c!=='—'?`<div class="card-code">${item.c}</div>`:''}
+        <div class="card-top"><span class="card-name">${item.n}</span><span class="card-price">${ps}</span></div>
+        <p class="card-desc">${item.d||'&nbsp;'}</p>
+        <button class="add-btn">+ Añadir al pedido</button>
+      </div>`;
+    }).join('');
+  }
+}
+renderMenus();
+
+function showCat(cat,btn){
+  document.querySelectorAll('.cat-section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('cat-'+cat).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ═══ CARRITO ═══
+let cart=[];
+function addToCart(name,price){
+  const ex=cart.find(i=>i.name===name);
+  if(ex){ex.qty++;}else{cart.push({name,price,qty:1});}
+  renderCart();
+  const short=name.replace(/^\[\d+\] /,'').substring(0,30);
+  showToast('✓ '+short+' añadido');
+}
+function removeFromCart(i){cart.splice(i,1);renderCart();}
+function renderCart(){
+  const c=document.getElementById('cartContent'),t=document.getElementById('cartTotal');
+  if(!cart.length){c.innerHTML='<p class="cart-empty">Añade platos desde el Menú.</p>';t.style.display='none';return;}
+  let total=0,html='<ul class="cart-items">';
+  cart.forEach((item,i)=>{
+    const sub=item.price*item.qty;total+=sub;
+    const dn=item.name.replace(/^\[\d+\] /,'');
+    html+=`<li class="cart-item"><span class="ci-name">${dn}</span><span class="ci-qty">×${item.qty}</span><span class="ci-price">${sub.toFixed(2).replace('.',',')}€</span><button class="ci-rm" onclick="removeFromCart(${i})">✕</button></li>`;
+  });
+  html+='</ul>';
+  c.innerHTML=html;
+  document.getElementById('totalPrice').textContent=total.toFixed(2).replace('.',',')+' €';
+  t.style.display='block';
+}
+
+// ═══ PEDIDO ═══
+async function submitOrder(){
+  const nombre=document.getElementById('nombre').value.trim();
+  const telefono=document.getElementById('telefono').value.trim();
+  const tipo=document.getElementById('tipo').value;
+  const notas=document.getElementById('notas').value.trim();
+  if(!nombre||!telefono||!tipo){showToast('⚠️ Completa los campos obligatorios',true);return;}
+  if(!cart.length){showToast('⚠️ Añade al menos un plato desde el Menú',true);return;}
+  const now=new Date();
+  const mins=now.getHours()*60+now.getMinutes();
+  if(mins>=21*60+30){showToast('⚠️ Pedidos web solo hasta las 21:30. Llámanos directamente.',true);return;}
+  const total=cart.reduce((s,i)=>s+i.price*i.qty,0);
+  const lista=cart.map(i=>`• ${i.name.replace(/^\[\d+\] /,'')} x${i.qty} — ${(i.price*i.qty).toFixed(2)}€`).join('\n');
+  const tipoLabel=tipo==='local'?'Comer en local':'Take Away (recogida)';
+
+  document.getElementById('orderFormWrap').classList.add('hide');
+  document.getElementById('sendingMsg').classList.add('show');
+
+  // Guardar registro local
+  try{
+    const p=JSON.parse(localStorage.getItem('cc_pedidos')||'[]');
+    p.unshift({fecha:now.toISOString(),nombre,telefono,tipo,notas,items:[...cart],total:total.toFixed(2)});
+    if(p.length>50)p.pop();
+    localStorage.setItem('cc_pedidos',JSON.stringify(p));
+  }catch(ex){}
+
+  // Enviar email via EmailJS
+  try{
+    await emailjs.send('service_bbefeno','template_462pn3y',{
+      to_email: 'citycafebr@gmail.com',
+      cliente:   nombre,
+      telefono:  telefono,
+      tipo:      tipoLabel,
+      hora:      now.toLocaleTimeString('es-ES') + ' · ' + now.toLocaleDateString('es-ES'),
+      platos:    lista,
+      total:     total.toFixed(2) + ' €',
+      notas:     notas || '—'
+    });
+    showToast('✅ Pedido enviado al restaurante');
+  }catch(ex){
+    console.error('EmailJS error:',ex);
+    showToast('⚠️ Pedido guardado pero no se pudo enviar el email. Llama al restaurante para confirmar.',true);
+  }
+
+  document.getElementById('sendingMsg').classList.remove('show');
+  document.getElementById('orderSuccess').classList.add('show');
+  cart=[];renderCart();
+}
+function resetOrder(){
+  document.getElementById('orderFormWrap').classList.remove('hide');
+  document.getElementById('orderSuccess').classList.remove('show');
+  ['nombre','telefono','notas'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('tipo').value='';
+}
+
+// ═══ TOAST ═══
+function showToast(msg,isErr){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.className='toast'+(isErr?' error':'');
+  t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3200);
+}
+</script>
+</body>
+</html>
